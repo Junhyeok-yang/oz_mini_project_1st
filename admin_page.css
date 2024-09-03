@@ -1,0 +1,46 @@
+.time-box {
+    width: 250px;            /* 너비 설정 */
+    height: 100px;           /* 높이 설정 */
+    background-color: #f8f9fa; /* 배경색 설정 */
+    border: 1px solid #dee2e6; /* 테두리 설정 */
+    border-radius: 5px;      /* 테두리 둥글게 처리 */
+    display: flex;           /* Flexbox를 사용하여 내용 중앙 정렬 */
+    justify-content: center; /* 가로 방향에서 중앙 정렬 */
+    align-items: center;     /* 세로 방향에서 중앙 정렬 */
+    font-size: 20px;         /* 글자 크기 설정 */
+    color: #495057;          /* 글자 색상 설정 */
+    margin: 20px 0 20px 20px;       /* 상하 20px, 좌우 자동 마진으로 중앙 배치 */
+}
+
+/*부트스트랩에서 가져온 다크모드 토글용*/ 
+$color-mode-type: data;
+
+@include color-mode(dark) {
+  .element {
+    color: var(--bs-primary-text-emphasis);
+    background-color: var(--bs-primary-bg-subtle);
+  }
+}
+[data-bs-theme=dark] .element {
+    color: var(--bs-primary-text-emphasis);
+    background-color: var(--bs-primary-bg-subtle);
+  }
+
+  /*도와줘요 지피티*/
+  .theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* 왼쪽 정렬로 변경 */
+    gap: 10px;
+    margin-top: 20px;
+    padding-left: 20px; /* 왼쪽 여백 추가 */
+}
+
+.theme-icon-light, .theme-icon-dark {
+    margin-right: 8px;
+}
+
+.theme-icon-dark {
+    display: none; /* 초기에는 다크 모드 아이콘이 숨겨져 있음 */
+}
+/*고마워요 지피티*/
