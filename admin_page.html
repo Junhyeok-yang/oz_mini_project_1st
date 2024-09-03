@@ -12,7 +12,8 @@
             <div class="col-12">
               <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
               <select class="form-select" id="inlineFormSelectPref">
-                <option value=“category>카테고리</option>
+                <!--카테고리 만들기-->
+                <option selected=“category>카테고리</option>
                 <option value=“clothesTop”>상의</option>
                 <option value=“clothesBottom”>하의</option>
                 <option value=“shoes”>신발</option>
@@ -20,8 +21,10 @@
               </select>
             </div>
             <div class="col-3">
+                <!--입력창 만들기-->
                 <input name="inputBox" placeholder="제품명을 입력해주세요">
               </div>
+              <!--조회 버튼 만들기-->
               <div class="col-auto">
                 <input class="btn btn-primary" type="submit" value="조회" title="조회">
               </div>
@@ -30,6 +33,12 @@
         <table class="table table-sm">
             <thead>
                 <!-- 열의 속성값을 나타내는 코드를 작성해주세요 (예 : 카테고리, 브랜드, 상품명, 가격) -->
+                 <tr>
+                    <th>카테고리</th>
+                    <th>브랜드</th>
+                    <th>상품명</th>
+                    <th>가격</th>
+                 </tr>
             </thead>
             <tbody id="data-table">
                 <!-- 추후 크롤링한 데이터가 들어가는 자리 -->
@@ -37,6 +46,7 @@
         </table>
 	    </div>
     </div>
+    <!--페이지네이션 만들기-->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
           <li class="page-item disabled">
