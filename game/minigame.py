@@ -902,3 +902,70 @@ player1.receive_battle_rewards(reward)
 # 병력 2개 복구 시도
 player1.recover_units('육군', 2)
 player1.display_units()
+
+# 9단계: 승리 조건 설정
+
+class Game:
+    def __init__(self, players, provinces):
+        self.players = players
+        self.provinces = provinces
+        self.game_over = False
+
+    def check_victory(self):
+        # 모든 프로빈스를 한 플레이어가 점령하면 승리
+        for player in self.players:
+            if all(province in player.provinces for province in self.provinces):
+                print(f"{player.name}이(가) 모든 프로빈스를 점령했습니다! 게임 종료!")
+                self.game_over = True
+                return player
+        # 자원 목표 달성 시 승리 조건 추가 가능
+        for player in self.players:
+            if player.resources['돈'] >= 50:
+                print(f"{player.name}이(가) 자원 목표를 달성했습니다! 게임 종료!")
+                self.game_over = True
+                return player
+
+    def check_game_over(self):
+        if self.game_over:
+            print("게임이 종료되었습니다.")
+        else:
+            print("게임이 아직 끝나지 않았습니다.")
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.resources = {'돈': 10, '식량': 20, '원자재': 15}
+        self.provinces = []
+
+    def add_province(self, province):
+        self.provinces.append(province)
+
+    def display_provinces(self):
+        print(f"{self.name}이(가) 점령한 프로빈스 목록:")
+        for province in self.provinces:
+            print(f"- {province.name}")
+
+# 프로빈스 클래스 (기존 코드에서 추가 사용 가능)
+class Province:
+    def __init__(self, name):
+        self.name = name
+
+# 플레이어 및 프로빈스 설정
+player1 = Player("Player1")
+player2 = Player("Player2")
+
+# 프로빈스 생성 및 할당
+gondor = Province("Gondor")
+rohan = Province("Rohan")
+mordor = Province("Mordor")
+
+player1.add_province(gondor)
+player1.add_province(rohan)
+player2.add_province(mordor)
+
+# 게임 생성
+game = Game([player1, player2], [gondor, rohan, mordor])
+
+# 승리 조건 체크
+game.check_victory()
+game.check_game_over()
