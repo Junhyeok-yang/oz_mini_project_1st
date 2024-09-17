@@ -569,3 +569,79 @@ turn_system = TurnSystem([player1, ai1, ai2])
 # 턴 진행 테스트 (예시로 3턴 실행)
 for _ in range(3):
     turn_system.next_turn()
+
+# 3단계: 자원 생산 및 소비 관리
+
+class Province:
+    def __init__(self, name, coordinates, resources, neighbors=None):
+        self.name = name
+        self.coordinates = coordinates
+        self.resources = resources  # 자원 딕셔너리 {'돈': 0, '식량': 0, '원자재': 0}
+        self.neighbors = neighbors if neighbors is not None else []
+
+    def add_neighbor(self, neighbor_province):
+        self.neighbors.append(neighbor_province)
+
+    # 자원 생산 함수
+    def produce_resources(self):
+        for resource, amount in self.resources.items():
+            self.resources[resource] += amount  # 매 턴마다 자원을 생산
+
+    # 자원 상태 출력
+    def display_resources(self):
+        print(f"{self.name} 자원 상태: {self.resources}")
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.province = None  # 플레이어가 선택한 프로빈스
+        self.resources = {'돈': 0, '식량': 0, '원자재': 0}
+        self.units = []  # 병력 리스트
+
+    def choose_province(self, province):
+        self.province = province
+        self.resources = province.resources.copy()  # 프로빈스 자원을 플레이어에게 할당
+
+    # 자원 관리: 자원 생산 및 소비
+    def manage_resources(self):
+        # 자원 생산
+        self.province.produce_resources()
+        self.resources = self.province.resources.copy()  # 자원 동기화
+        print(f"{self.name}의 자원 상태: {self.resources}")
+
+    # 병력 생산 및 자원 소모
+    def produce_units(self, unit_type):
+        if self.resources['돈'] >= 2 and self.resources['식량'] >= 3:
+            new_unit = UnitCard(unit_type, attack=5, defense=5, movement=3)
+            self.units.append(new_unit)
+            self.resources['돈'] -= 2
+            self.resources['식량'] -= 3
+            print(f"{self.name}이(가) {unit_type}을(를) 생산했습니다!")
+        else:
+            print(f"{self.name}의 자원이 부족하여 병력을 생산할 수 없습니다.")
+
+    def display_units(self):
+        print(f"{self.name}의 병력 목록:")
+        for unit in self.units:
+            unit.display_unit_info()
+
+class UnitCard:
+    def __init__(self, unit_type, attack, defense, movement):
+        self.unit_type = unit_type
+        self.attack = attack
+        self.defense = defense
+        self.movement = movement
+
+    def display_unit_info(self):
+        print(f"유닛: {self.unit_type}, 공격력: {self.attack}, 방어력: {self.defense}, 이동력: {self.movement}")
+
+# 예시: 프로빈스 생성 및 자원 생산 테스트
+gondor = Province("Gondor", (10, 20), {'돈': 5, '식량': 10, '원자재': 7})
+player1 = Player("Player1")
+player1.choose_province(gondor)
+
+# 자원 관리 및 병력 생산 테스트
+player1.manage_resources()
+player1.produce_units('육군')
+player1.display_units()
+
