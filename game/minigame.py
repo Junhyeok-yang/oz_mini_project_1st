@@ -645,3 +645,69 @@ player1.manage_resources()
 player1.produce_units('육군')
 player1.display_units()
 
+# 4단계: 병력 이동 및 전투 준비
+
+class Province:
+    def __init__(self, name, coordinates, resources, neighbors=None):
+        self.name = name
+        self.coordinates = coordinates
+        self.resources = resources  # 자원 딕셔너리 {'돈': 0, '식량': 0, '원자재': 0}
+        self.neighbors = neighbors if neighbors is not None else []
+
+    def add_neighbor(self, neighbor_province):
+        self.neighbors.append(neighbor_province)
+
+class UnitCard:
+    def __init__(self, unit_type, attack, defense, movement):
+        self.unit_type = unit_type
+        self.attack = attack
+        self.defense = defense
+        self.movement = movement
+
+    def display_unit_info(self):
+        print(f"유닛: {self.unit_type}, 공격력: {self.attack}, 방어력: {self.defense}, 이동력: {self.movement}")
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.province = None  # 플레이어가 선택한 프로빈스
+        self.resources = {'돈': 0, '식량': 0, '원자재': 0}
+        self.units = []  # 병력 리스트
+
+    def choose_province(self, province):
+        self.province = province
+        self.resources = province.resources.copy()  # 프로빈스 자원을 플레이어에게 할당
+
+    def add_unit(self, unit_card):
+        self.units.append(unit_card)
+
+    # 병력 이동
+    def move_unit(self, unit_card, target_province):
+        if target_province in self.province.neighbors:
+            print(f"{self.name}의 {unit_card.unit_type}이(가) {self.province.name}에서 {target_province.name}으로 이동합니다.")
+            self.province = target_province  # 프로빈스 변경
+        else:
+            print(f"{self.name}의 병력은 {target_province.name}으로 이동할 수 없습니다. (인접하지 않음)")
+
+    # 전투 준비
+    def prepare_battle(self, target_province):
+        print(f"{self.name}이(가) {target_province.name}에서 전투를 준비 중입니다.")
+        # 추가 전투 로직 구현 예정
+
+# 예시: 프로빈스 생성 및 병력 이동 테스트
+gondor = Province("Gondor", (10, 20), {'돈': 5, '식량': 10, '원자재': 7})
+rohan = Province("Rohan", (15, 25), {'돈': 3, '식량': 8, '원자재': 6})
+mordor = Province("Mordor", (20, 30), {'돈': 6, '식량': 5, '원자재': 9})
+
+gondor.add_neighbor(rohan)
+rohan.add_neighbor(mordor)
+
+player1 = Player("Player1")
+player1.choose_province(gondor)
+
+army = UnitCard('육군', attack=5, defense=8, movement=2)
+player1.add_unit(army)
+
+# 병력 이동 및 전투 준비 테스트
+player1.move_unit(army, rohan)  # 병력 이동
+player1.prepare_battle(rohan)  # 전투 준비
