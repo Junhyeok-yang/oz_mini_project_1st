@@ -969,3 +969,63 @@ game = Game([player1, player2], [gondor, rohan, mordor])
 # 승리 조건 체크
 game.check_victory()
 game.check_game_over()
+
+# 10단계: 그래픽 UI 기본 프레임 (콘솔 기반)
+
+class GameUI:
+    def __init__(self, players):
+        self.players = players
+
+    def display_player_info(self, player):
+        print(f"\n{player.name}의 정보:")
+        print(f"자원 상태: {player.resources}")
+        print("보유 병력:")
+        for unit in player.units:
+            unit.display_unit_info()
+
+    def display_turn_info(self, current_player):
+        print(f"\n--- {current_player.name}의 턴 ---")
+
+    def display_diplomacy_options(self, player1, player2):
+        print(f"\n{player1.name}은(는) {player2.name}과(와) 외교 활동을 할 수 있습니다:")
+        print("1. 동맹 제안")
+        print("2. 자원 교환")
+        print("3. 전쟁 선포")
+
+# 병력 카드 (기존 코드에서 사용)
+class UnitCard:
+    def __init__(self, unit_type, attack, defense, movement):
+        self.unit_type = unit_type
+        self.attack = attack
+        self.defense = defense
+        self.movement = movement
+
+    def display_unit_info(self):
+        print(f"유닛: {self.unit_type}, 공격력: {self.attack}, 방어력: {self.defense}, 이동력: {self.movement}")
+
+# 플레이어 클래스 (기존 코드에서 사용)
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.resources = {'돈': 10, '식량': 20, '원자재': 15}
+        self.units = []  # 병력 리스트
+
+    def add_unit(self, unit_card):
+        self.units.append(unit_card)
+
+# 예시 실행
+player1 = Player("Player1")
+ai1 = Player("AI_Player1")
+
+# 병력 추가
+army = UnitCard('육군', attack=5, defense=8, movement=2)
+player1.add_unit(army)
+ai1.add_unit(army)
+
+# UI 생성 및 정보 출력
+game_ui = GameUI([player1, ai1])
+game_ui.display_player_info(player1)
+game_ui.display_turn_info(player1)
+
+# 외교 활동 출력
+game_ui.display_diplomacy_options(player1, ai1)
