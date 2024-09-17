@@ -839,3 +839,66 @@ player1 = Player("Player1")
 ai1.take_turn()
 ai2.take_turn()
 ai1.consider_diplomacy(player1)  # 외교 시도
+
+# 8단계: 전투 후 자원 및 병력 회복
+
+class UnitCard:
+    def __init__(self, unit_type, attack, defense, movement):
+        self.unit_type = unit_type
+        self.attack = attack
+        self.defense = defense
+        self.movement = movement
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.resources = {'돈': 10, '식량': 20, '원자재': 15}
+        self.units = []  # 병력 리스트
+
+    def add_unit(self, unit_card):
+        self.units.append(unit_card)
+
+    def display_units(self):
+        print(f"{self.name}의 병력 목록:")
+        for unit in self.units:
+            unit.display_unit_info()
+
+    # 전투 후 자원 보상
+    def receive_battle_rewards(self, reward_resources):
+        for resource, amount in reward_resources.items():
+            self.resources[resource] += amount
+        print(f"{self.name}이(가) 전투 보상으로 {reward_resources}을(를) 받았습니다!")
+
+    # 병력 재배치 (전투 후 병력 손실 복구)
+    def recover_units(self, unit_type, num_units):
+        cost = {'돈': 2, '식량': 3}  # 병력 1개를 복구하는 데 필요한 자원
+        if self.resources['돈'] >= cost['돈'] * num_units and self.resources['식량'] >= cost['식량'] * num_units:
+            for _ in range(num_units):
+                new_unit = UnitCard(unit_type, attack=5, defense=5, movement=3)
+                self.add_unit(new_unit)
+            self.resources['돈'] -= cost['돈'] * num_units
+            self.resources['식량'] -= cost['식량'] * num_units
+            print(f"{self.name}이(가) 병력 {num_units}개를 복구했습니다!")
+        else:
+            print(f"{self.name}이(가) 병력을 복구할 자원이 부족합니다.")
+
+class UnitCard:
+    def __init__(self, unit_type, attack, defense, movement):
+        self.unit_type = unit_type
+        self.attack = attack
+        self.defense = defense
+        self.movement = movement
+
+    def display_unit_info(self):
+        print(f"유닛: {self.unit_type}, 공격력: {self.attack}, 방어력: {self.defense}, 이동력: {self.movement}")
+
+# 전투 후 병력 회복 및 자원 보상 테스트
+player1 = Player("Player1")
+
+# 병력 재배치 및 자원 보상 테스트
+reward = {'돈': 5, '식량': 10}
+player1.receive_battle_rewards(reward)
+
+# 병력 2개 복구 시도
+player1.recover_units('육군', 2)
+player1.display_units()
