@@ -460,3 +460,41 @@ game_ui.display_turn_info(player1)
 # 외교 활동 선택
 game_ui.display_diplomacy_options(player1, ai1)
 
+# 1단계: 게임 초기화 및 설정 통합
+
+class GameSetup:
+    def __init__(self):
+        self.players = []  # 플레이어와 AI 리스트
+        self.provinces = []  # 프로빈스 리스트
+
+    def initialize_map(self):
+        # 프로빈스 생성 및 설정
+        gondor = Province("Gondor", (10, 20), {'돈': 5, '식량': 10, '원자재': 7})
+        rohan = Province("Rohan", (15, 25), {'돈': 3, '식량': 8, '원자재': 6})
+        mordor = Province("Mordor", (20, 30), {'돈': 6, '식량': 5, '원자재': 9})
+        gondor.add_neighbor(rohan)
+        rohan.add_neighbor(mordor)
+
+        self.provinces.extend([gondor, rohan, mordor])
+
+    def initialize_players(self):
+        # 플레이어와 AI 초기화
+        player1 = Player("Player1")
+        ai1 = AIPlayer("AI_Player1", "aggressive")
+        ai2 = AIPlayer("AI_Player2", "passive")
+
+        # 플레이어가 프로빈스 선택
+        player1.choose_province(self.provinces[0])
+        ai1.choose_province(self.provinces[1])
+        ai2.choose_province(self.provinces[2])
+
+        self.players.extend([player1, ai1, ai2])
+
+    def start_game(self):
+        print("게임을 시작합니다!")
+        self.initialize_map()
+        self.initialize_players()
+
+# 게임 시작
+game_setup = GameSetup()
+game_setup.start_game()
