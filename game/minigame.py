@@ -747,3 +747,41 @@ army_defender = UnitCard('육군', attack=4, defense=6, movement=3)
 
 # 전투 테스트
 battle(army_attacker, army_defender)
+
+import random
+
+# 6단계: 외교 시스템 확장
+
+class DiplomacySystem:
+    def __init__(self, player1, player2):
+        self.player1 = player1
+        self.player2 = player2
+
+    def propose_alliance(self):
+        success = random.randint(1, 100) <= 70  # 70% 확률로 동맹이 성립됨
+        if success:
+            print(f"{self.player1.name}과 {self.player2.name}이(가) 동맹을 맺었습니다!")
+        else:
+            print(f"{self.player1.name}의 동맹 제안이 {self.player2.name}에 의해 거절되었습니다.")
+
+    def trade_resources(self, resource, amount):
+        if self.player1.resources[resource] >= amount:
+            self.player1.resources[resource] -= amount
+            self.player2.resources[resource] += amount
+            print(f"{self.player1.name}이(가) {self.player2.name}에게 {resource} {amount}만큼을 교환했습니다.")
+        else:
+            print(f"{self.player1.name}이(가) {resource}가 충분하지 않습니다.")
+
+    def declare_war(self):
+        print(f"{self.player1.name}이(가) {self.player2.name}에게 전쟁을 선포했습니다!")
+        # 전쟁 로직 추가 예정
+
+# 플레이어 및 AI 설정
+player1 = Player("Player1")
+ai1 = AIPlayer("AI_Player1", "balanced")
+
+# 외교 시스템 테스트
+diplomacy = DiplomacySystem(player1, ai1)
+diplomacy.propose_alliance()  # 동맹 제안
+diplomacy.trade_resources('돈', 5)  # 자원 교환
+diplomacy.declare_war()  # 전쟁 선포
