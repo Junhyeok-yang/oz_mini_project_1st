@@ -785,3 +785,57 @@ diplomacy = DiplomacySystem(player1, ai1)
 diplomacy.propose_alliance()  # 동맹 제안
 diplomacy.trade_resources('돈', 5)  # 자원 교환
 diplomacy.declare_war()  # 전쟁 선포
+
+# 7단계: AI 전투 및 외교 로직 강화
+
+class AIPlayer(Player):
+    def __init__(self, name, personality):
+        super().__init__(name)
+        self.personality = personality  # 공격적, 수동적, 균형 성향
+
+    def take_turn(self):
+        print(f"{self.name}의 AI 행동: {self.personality} 성향에 따라 결정됩니다.")
+        
+        if self.personality == "aggressive":
+            # 공격 성향: 자원을 빠르게 소모하고 병력을 강화
+            self.manage_resources()
+            self.attack_enemy()
+        elif self.personality == "passive":
+            # 수동 성향: 자원을 비축하고 방어 위주로 진행
+            self.manage_resources()
+            self.defend()
+        elif self.personality == "balanced":
+            # 균형 잡힌 성향: 랜덤하게 공격 또는 방어 결정
+            self.manage_resources()
+            if random.choice([True, False]):
+                self.attack_enemy()
+            else:
+                self.defend()
+
+    def attack_enemy(self):
+        # AI가 상대를 공격할지 결정하는 로직 (전투 준비 상태로 전환)
+        print(f"{self.name}이(가) 공격을 준비 중입니다!")
+        # 추가 전투 로직은 이후 단계에서 확장 가능
+
+    def defend(self):
+        # AI가 방어 태세를 유지하는 로직
+        print(f"{self.name}이(가) 방어 전략을 선택했습니다!")
+
+    def consider_diplomacy(self, opponent):
+        # AI가 외교 활동을 고려
+        if self.personality == "aggressive" and random.randint(1, 100) > 50:
+            print(f"{self.name}은(는) 공격적인 성향이므로 동맹을 맺지 않습니다.")
+        else:
+            print(f"{self.name}이(가) {opponent.name}와 동맹을 맺을 가능성을 고려 중입니다.")
+            diplomacy = DiplomacySystem(self, opponent)
+            diplomacy.propose_alliance()  # 동맹 시도
+
+# AI 및 플레이어 설정
+ai1 = AIPlayer("AI_Player1", "aggressive")
+ai2 = AIPlayer("AI_Player2", "balanced")
+player1 = Player("Player1")
+
+# AI 외교 및 전투 테스트
+ai1.take_turn()
+ai2.take_turn()
+ai1.consider_diplomacy(player1)  # 외교 시도
