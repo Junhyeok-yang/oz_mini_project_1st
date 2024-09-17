@@ -711,3 +711,39 @@ player1.add_unit(army)
 # 병력 이동 및 전투 준비 테스트
 player1.move_unit(army, rohan)  # 병력 이동
 player1.prepare_battle(rohan)  # 전투 준비
+
+import random
+
+# 5단계: 전투 시스템 확장
+
+class UnitCard:
+    def __init__(self, unit_type, attack, defense, movement):
+        self.unit_type = unit_type
+        self.attack = attack
+        self.defense = defense
+        self.movement = movement
+
+    def display_unit_info(self):
+        print(f"유닛: {self.unit_type}, 공격력: {self.attack}, 방어력: {self.defense}, 이동력: {self.movement}")
+
+# 전투 시스템 (주사위 굴림)
+def battle(attacker, defender):
+    attack_roll = random.randint(1, 6) + attacker.attack
+    defense_roll = random.randint(1, 6) + defender.defense
+
+    print(f"{attacker.unit_type} 공격 주사위: {attack_roll}")
+    print(f"{defender.unit_type} 방어 주사위: {defense_roll}")
+
+    if attack_roll > defense_roll:
+        print(f"{attacker.unit_type}가 {defender.unit_type}을(를) 공격 성공!")
+        return "attack_success"
+    else:
+        print(f"{defender.unit_type}가 {attacker.unit_type}의 공격을 막아냈습니다!")
+        return "defense_success"
+
+# 병력 카드 생성 예시
+army_attacker = UnitCard('육군', attack=5, defense=8, movement=2)
+army_defender = UnitCard('육군', attack=4, defense=6, movement=3)
+
+# 전투 테스트
+battle(army_attacker, army_defender)
