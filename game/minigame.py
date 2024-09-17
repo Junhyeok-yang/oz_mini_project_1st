@@ -498,3 +498,74 @@ class GameSetup:
 # 게임 시작
 game_setup = GameSetup()
 game_setup.start_game()
+
+# 2단계: 턴 진행 시스템 구축
+
+class TurnSystem:
+    def __init__(self, players):
+        self.players = players
+        self.current_turn = 0
+
+    def next_turn(self):
+        current_player = self.players[self.current_turn]
+        print(f"\n--- {current_player.name}의 턴 ---")
+        
+        # 플레이어가 자원을 관리하거나 병력을 이동하거나 외교를 선택할 수 있음
+        current_player.take_turn()
+        
+        # 다음 플레이어로 턴을 전환
+        self.current_turn = (self.current_turn + 1) % len(self.players)
+        print(f"다음 플레이어는 {self.players[self.current_turn].name}입니다.\n")
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.resources = {'돈': 5, '식량': 10, '원자재': 7}
+        self.units = []  # 병력 리스트
+
+    def take_turn(self):
+        print(f"{self.name}이(가) 자원 관리 또는 병력 이동을 선택합니다.")
+        # 자원 관리, 병력 이동, 외교 중 선택하게 할 수 있음
+        self.manage_resources()
+
+    def manage_resources(self):
+        print(f"{self.name}이(가) 자원을 관리합니다.")
+        for resource, amount in self.resources.items():
+            self.resources[resource] += 1  # 예시로 자원을 한 번씩 추가
+        print(f"{self.name}의 자원 상태: {self.resources}")
+
+class AIPlayer(Player):
+    def __init__(self, name, personality):
+        super().__init__(name)
+        self.personality = personality
+
+    def take_turn(self):
+        print(f"{self.name}의 AI 행동: {self.personality} 전략에 따라 움직임")
+        if self.personality == "aggressive":
+            self.attack_enemy()
+        elif self.personality == "passive":
+            self.defend()
+        else:
+            # 균형 잡힌 성향의 경우 자원 관리와 병력 이동을 무작위로 결정
+            if random.choice([True, False]):
+                self.attack_enemy()
+            else:
+                self.defend()
+
+    def attack_enemy(self):
+        print(f"{self.name}이(가) 적을 공격합니다!")
+
+    def defend(self):
+        print(f"{self.name}이(가) 방어 준비를 합니다.")
+
+# 플레이어와 AI 설정
+player1 = Player("Player1")
+ai1 = AIPlayer("AI_Player1", "aggressive")
+ai2 = AIPlayer("AI_Player2", "passive")
+
+# 턴제 시스템 설정
+turn_system = TurnSystem([player1, ai1, ai2])
+
+# 턴 진행 테스트 (예시로 3턴 실행)
+for _ in range(3):
+    turn_system.next_turn()
